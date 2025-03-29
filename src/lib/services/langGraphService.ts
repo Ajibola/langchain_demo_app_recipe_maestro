@@ -108,9 +108,9 @@ export class RecipeService {
   constructor(options: { apiUrl?: string; graphName?: string; useMockData?: boolean } = {}) {
     this.langGraph = new LangGraphClient({
       apiUrl: options.apiUrl || "http://localhost:2024",
-      graphName: options.graphName || "recipe-maestro"
+      graphName: options.graphName || "agent"
     });
-    this.useMockData = options.useMockData ?? true; // Default to using mock data
+    this.useMockData = options.useMockData ?? false; // Default to using mock data
   }
   
   /**
@@ -130,20 +130,7 @@ export class RecipeService {
   ): Promise<Recipe | null> {
     try {
       // Use mock data if enabled
-      if (this.useMockData) {
-        // Simulate streaming updates
-        setTimeout(() => onUpdate('generate_recipe', { status: 'running' }), 500);
-        setTimeout(() => onUpdate('format_recipe', { status: 'running' }), 1500);
-        setTimeout(() => onUpdate('calculate_nutrition', { status: 'running' }), 2500);
-        
-        // Return mock recipe after delay
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(this.getMockRecipe(params));
-          }, 3000);
-        });
-      }
-      
+      console.log(params)
       // Use actual LangGraph service
       const result = await this.langGraph.stream(params as Record<string, unknown>, onUpdate);
       return result as Recipe | null;
@@ -151,10 +138,6 @@ export class RecipeService {
       console.error("Error generating recipe:", error);
       
       // Fall back to mock data if there's an error
-      if (!this.useMockData) {
-        console.log("Falling back to mock data");
-        return this.getMockRecipe(params);
-      }
       
       throw error;
     }

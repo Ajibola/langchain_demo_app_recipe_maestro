@@ -8,26 +8,11 @@
 	
 	// Initialize store persistence in the layout
 	onMount(() => {
-		if (typeof window !== 'undefined') {
-			const persister = createIndexedDbPersister(store, 'recipe-maestro-state');
-			
-			// Load existing data if available
-			persister.load()
-				.catch(error => {
-					console.error('Failed to load from IndexedDB:', error);
-				});
-			
-			// Start auto-saving
-			persister.startAutoSave();
-			
-			return () => {
-				// Clean up on unmount
-				persister.stopAutoSave();
-			};
-		}
 	});
 </script>
-
+<svelte:head>
+  <title>Recipe Maestro</title>
+</svelte:head>
 <div class="min-h-screen bg-background text-foreground">
   <main class="container mx-auto px-4 py-8">
     {@render children()}
