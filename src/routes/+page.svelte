@@ -7,9 +7,9 @@
     const currentStep = getCurrentStep();
     const completedSteps = getCompletedSteps();
     
-    // If all steps are completed, show a summary
+    // If all steps are completed, go to recipe generation
     if (completedSteps.includes('skill') && completedSteps.includes('cuisine') && completedSteps.includes('dietary')) {
-      // Stay on this page to show the summary
+      goto('/generate');
     } else if (currentStep) {
       // Redirect to the current step
       goto(`/${currentStep}`);
